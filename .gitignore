@@ -1,0 +1,12 @@
+/vendor
+/composer.lock
+/composer.cleanroom.json
+/composer.cleanroom.lock
+/public
+/app
+/behat.yml
+/.env
+/.graphql-generated
+.DS_Store
+.phpunit.cache/
+.phpunit.result.cache
