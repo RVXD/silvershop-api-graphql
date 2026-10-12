@@ -1,0 +1,18 @@
+fr:
+  SilverShop\Api\GraphQL\Auth\ResolverScope:
+    ReadScopeRequired: 'Un jeton avec la portée « read » est requis pour lire le catalogue.'
+    AuthRequired: 'Authentification requise.'
+    ScopeRequired: 'Cette action nécessite la portée « {scope} ».'
+    InvalidToken: 'Jeton API invalide ou expiré.'
+    ProductNotFound: 'Produit introuvable.'
+    CategoryNotFound: 'Catégorie introuvable.'
+    VariationNotFound: 'Variante introuvable.'
+    CannotSort: 'Impossible de trier par « {field} ».'
+    OrderNotFound: 'Commande introuvable.'
+    CartEmpty: 'Le panier est vide.'
+    BuyableNotFound: 'Article introuvable.'
+    QuantityRequired: 'Une quantité égale ou supérieure à zéro est requise.'
+    ItemNotInCart: 'Article introuvable dans le panier.'
+    AddressNotFound: 'Adresse introuvable.'
+    NoWritableFields: 'Aucun champ modifiable fourni.'
+    ValidationFailed: 'Échec de la validation : {messages}'

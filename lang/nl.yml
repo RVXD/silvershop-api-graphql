@@ -1,0 +1,18 @@
+nl:
+  SilverShop\Api\GraphQL\Auth\ResolverScope:
+    ReadScopeRequired: 'Een token met de scope "read" is vereist om de catalogus te lezen.'
+    AuthRequired: 'Authenticatie vereist.'
+    ScopeRequired: 'Voor deze actie is de scope "{scope}" vereist.'
+    InvalidToken: 'Ongeldige of verlopen API-token.'
+    ProductNotFound: 'Product niet gevonden.'
+    CategoryNotFound: 'Categorie niet gevonden.'
+    VariationNotFound: 'Variatie niet gevonden.'
+    CannotSort: 'Kan niet sorteren op "{field}".'
+    OrderNotFound: 'Bestelling niet gevonden.'
+    CartEmpty: 'De winkelwagen is leeg.'
+    BuyableNotFound: 'Artikel niet gevonden.'
+    QuantityRequired: 'Een aantal van nul of hoger is vereist.'
+    ItemNotInCart: 'Artikel niet in winkelwagen gevonden.'
+    AddressNotFound: 'Adres niet gevonden.'
+    NoWritableFields: 'Geen wijzigbare velden opgegeven.'
+    ValidationFailed: 'Validatie mislukt: {messages}'

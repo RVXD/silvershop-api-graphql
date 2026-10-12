@@ -1,0 +1,18 @@
+en:
+  SilverShop\Api\GraphQL\Auth\ResolverScope:
+    ReadScopeRequired: 'A token with the "read" scope is required to read the catalog.'
+    AuthRequired: 'Authentication required.'
+    ScopeRequired: 'This action requires the "{scope}" scope.'
+    InvalidToken: 'Invalid or expired API token.'
+    ProductNotFound: 'Product not found.'
+    CategoryNotFound: 'Category not found.'
+    VariationNotFound: 'Variation not found.'
+    CannotSort: 'Cannot sort by "{field}".'
+    OrderNotFound: 'Order not found.'
+    CartEmpty: 'The cart is empty.'
+    BuyableNotFound: 'Buyable not found.'
+    QuantityRequired: 'A quantity of zero or greater is required.'
+    ItemNotInCart: 'Item not found in cart.'
+    AddressNotFound: 'Address not found.'
+    NoWritableFields: 'No writable fields supplied.'
+    ValidationFailed: 'Validation failed: {messages}'
