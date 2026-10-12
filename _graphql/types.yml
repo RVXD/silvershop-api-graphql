@@ -1,0 +1,147 @@
+# Generic (non-model) GraphQL types whose fields mirror the REST base's serializer output key-for-key, so the REST
+# and GraphQL surfaces cannot drift: each resolver delegates to the matching SilverShop\Api\Serializer\* serializer
+# and returns its array, which GraphQL's default array resolver maps onto these fields.
+#
+# Field names == serializer array keys (camelCase). Fields are nullable to match the serializers, which may omit
+# optional keys (e.g. priceRange, variationIDs) or emit null (e.g. an absent image/address).
+
+# SilverShop\Api\Serializer\Serializer::serialiseImage()
+ShopImage:
+  fields:
+    id: Int
+    url: String
+    alt: String
+    width: Int
+    height: Int
+
+# SilverShop\Api\Serializer\ProductSerializer priceRange block
+PriceRange:
+  fields:
+    hasRange: Boolean
+    min: Float
+    max: Float
+
+# SilverShop\Api\Serializer\ProductSerializer
+Product:
+  fields:
+    id: Int
+    title: String
+    price: Float
+    link: String
+    urlSegment: String
+    internalItemID: String
+    model: String
+    currency: String
+    featured: Boolean
+    available: Boolean
+    categoryIDs: '[Int]'
+    image: ShopImage
+    variationIDs: '[Int]'
+    priceRange: PriceRange
+
+# One row of SilverShop\Api\Serializer\VariationSerializer attributes
+VariationAttribute:
+  fields:
+    typeID: Int
+    type: String
+    valueID: Int
+    value: String
+
+# SilverShop\Api\Serializer\VariationSerializer
+Variation:
+  fields:
+    id: Int
+    productID: Int
+    title: String
+    internalItemID: String
+    price: Float
+    currency: String
+    available: Boolean
+    attributes: '[VariationAttribute]'
+    image: ShopImage
+
+# SilverShop\Api\Serializer\CategorySerializer (plus a `children` branch populated only by the categoryTree query)
+ProductCategory:
+  fields:
+    id: Int
+    title: String
+    menuTitle: String
+    urlSegment: String
+    link: String
+    parentID: Int
+    childCategoryIDs: '[Int]'
+    children: '[ProductCategory]'
+
+# SilverShop\Api\Serializer\AddressSerializer
+Address:
+  fields:
+    id: Int
+    firstName: String
+    surname: String
+    company: String
+    address: String
+    addressLine2: String
+    city: String
+    state: String
+    postalCode: String
+    country: String
+    phone: String
+    formatted: String
+
+# SilverShop\Api\Serializer\CustomerSerializer
+Customer:
+  fields:
+    id: Int
+    firstName: String
+    surname: String
+    email: String
+    defaultShippingAddressID: Int
+    defaultBillingAddressID: Int
+    addresses: '[Address]'
+
+# One row of SilverShop\Api\Serializer\OrderSerializer items
+OrderItem:
+  fields:
+    id: Int
+    title: String
+    buyableID: Int
+    buyableClass: String
+    quantity: Int
+    unitPrice: Float
+    total: Float
+
+# SilverShop\Api\Serializer\OrderSerializer. A cart is an Order with status "Cart", so the `cart` query and the cart
+# mutations reuse this exact shape.
+Order:
+  fields:
+    id: Int
+    reference: String
+    status: String
+    statusLabel: String
+    placed: String
+    created: String
+    currency: String
+    subTotal: Float
+    total: Float
+    totalOutstanding: Float
+    paid: Boolean
+    itemCount: Int
+    items: '[OrderItem]'
+    shippingAddress: Address
+    billingAddress: Address
+
+# Envelope returned by the cart mutations (mirrors CartResource::cartOperationResult()).
+CartMutationPayload:
+  fields:
+    success: Boolean
+    message: String
+    messageType: String
+    itemId: Int
+    cart: Order
+
+# Checkout hand-off (mirrors CartResource::checkout()) — hosted-checkout URLs, never an API payment capture.
+CheckoutPayload:
+  fields:
+    checkoutUrl: String
+    cartUrl: String
+    reference: String

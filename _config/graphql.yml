@@ -1,0 +1,33 @@
+---
+Name: silvershop-api-graphql
+After:
+  - '#graphqlconfig'
+  - '#graphql-middlewares'
+  - '#graphql-schema-default'
+---
+# Mount the public GraphQL endpoint. A cart/catalog SPA queries POST /graphql; the CMS admin schema (removed in
+# CMS 6) is unaffected — this is the frontend-only `default` schema.
+SilverStripe\Control\Director:
+  rules:
+    'graphql': '%$SilverStripe\GraphQL\Controller.default'
+
+# Register this module's _graphql/ definitions (types + queries + mutations) into the default schema. Every module
+# that contributes `src` entries is merged into one schema, so feature modules can later add their own DataObject
+# types (brands -> Brand, reviews -> Review, ...) the same way.
+SilverStripe\GraphQL\Schema\Schema:
+  schemas:
+    default:
+      src:
+        silvershop-api-graphql: 'silvershop/api-graphql: _graphql'
+
+# Wire the bearer-token auth onto the default schema's query handler:
+#  - bearerToken: resolves the Authorization: Bearer token via the REST base's TokenAuthenticator into an ApiContext
+#                 (member + scopes) and logs the member in for the request, so resolvers enforce scopes like REST.
+#  - csrf: replace the stock CSRF middleware with a bearer-aware variant that skips CSRF for token-authenticated
+#          requests (the token IS the auth) while still protecting same-origin session mutations.
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\GraphQL\QueryHandler\QueryHandlerInterface.default:
+    properties:
+      Middlewares:
+        bearerToken: '%$SilverShop\Api\GraphQL\Auth\ApiTokenQueryMiddleware'
+        csrf: '%$SilverShop\Api\GraphQL\Auth\BearerAwareCSRFMiddleware'

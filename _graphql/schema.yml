@@ -1,0 +1,77 @@
+# Custom queries and mutations for the public SilverShop schema. Every operation is backed by a static resolver in
+# src/Resolver/* that reuses the REST base's serializers, auth (ApiContext + scopes) and core cart/order plumbing,
+# so GraphQL and REST agree field-for-field and scope-for-scope.
+#
+# Catalog reads honour the base's `public_read` gate; `me`/`cart`/orders require an authenticated member; cart and
+# customer writes require the `write` scope (bearer) or a valid same-origin session (CSRF handled in middleware).
+
+queries:
+  # --- Catalog (read: public_read gate, like REST) ---
+  'products(limit: Int = 30, start: Int = 0, sort: String, category: Int, featured: Boolean, title: String)':
+    type: '[Product]'
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveProducts']
+  'product(id: Int, urlSegment: String)':
+    type: Product
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveProduct']
+  'categories(limit: Int = 30, start: Int = 0, sort: String, parentID: Int)':
+    type: '[ProductCategory]'
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveCategories']
+  'category(id: Int, urlSegment: String)':
+    type: ProductCategory
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveCategory']
+  categoryTree:
+    type: '[ProductCategory]'
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveCategoryTree']
+  'variations(limit: Int = 30, start: Int = 0, sort: String, productID: Int)':
+    type: '[Variation]'
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveVariations']
+  'variation(id: Int!)':
+    type: Variation
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CatalogResolver', 'resolveVariation']
+
+  # --- Customer self-service + own orders (authenticated member) ---
+  me:
+    type: Customer
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CustomerResolver', 'resolveMe']
+  'myOrders(limit: Int = 30, start: Int = 0, sort: String)':
+    type: '[Order]'
+    resolver: ['SilverShop\Api\GraphQL\Resolver\OrderResolver', 'resolveMyOrders']
+  'order(id: Int!)':
+    type: Order
+    resolver: ['SilverShop\Api\GraphQL\Resolver\OrderResolver', 'resolveOrder']
+
+  # --- Cart (read; same-origin session or token-bound) ---
+  cart:
+    type: Order
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveCart']
+
+mutations:
+  # --- Cart (write: `write` scope for bearer, CSRF for session) ---
+  'cartAdd(productID: Int!, buyable: String, quantity: Int = 1)':
+    type: CartMutationPayload
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveAdd']
+  'cartUpdate(productID: Int!, buyable: String, quantity: Int!)':
+    type: CartMutationPayload
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveUpdate']
+  'cartRemove(productID: Int!, buyable: String, quantity: Int)':
+    type: CartMutationPayload
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveRemove']
+  cartClear:
+    type: CartMutationPayload
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveClear']
+
+  # --- Checkout hand-off (no API payment) ---
+  checkout:
+    type: CheckoutPayload
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveCheckout']
+
+  # --- Customer profile + address book (write) ---
+  'updateCustomer(firstName: String, surname: String)':
+    type: Customer
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CustomerResolver', 'resolveUpdateCustomer']
+  'addAddress(firstName: String, surname: String, company: String, address: String, addressLine2: String, city: String, state: String, postalCode: String, country: String, phone: String)':
+    type: Address
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CustomerResolver', 'resolveAddAddress']
+  'updateAddress(id: Int!, firstName: String, surname: String, company: String, address: String, addressLine2: String, city: String, state: String, postalCode: String, country: String, phone: String)':
+    type: Address
+    resolver: ['SilverShop\Api\GraphQL\Resolver\CustomerResolver', 'resolveUpdateAddress']
