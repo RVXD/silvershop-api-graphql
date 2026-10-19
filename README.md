@@ -1,6 +1,6 @@
-# silvershop/api-graphql
+# silvershop-suite/api-graphql
 
-A **GraphQL overlay** for [`silvershop/api`](https://github.com/RVXD/silvershop-api) — a public `/graphql`
+A **GraphQL overlay** for [`silvershop-suite/api`](https://github.com/RVXD/silvershop-api) — a public `/graphql`
 endpoint for the SilverShop catalog, cart, checkout hand-off, orders and customer self-service on SilverStripe
 CMS 6.
 
@@ -9,20 +9,20 @@ reuses the REST base wholesale — the same `ApiToken` bearer auth and `read`/`w
 `SilverShop\Api\Serializer\*` serializers. Because both surfaces serialise through the same serializers, a product,
 cart or order looks **identical** over `/graphql` and over `/api/v1`, field-for-field.
 
-> **Why a separate module?** The REST base `silvershop/api` is deliberately GraphQL-free, so REST installs with no
+> **Why a separate module?** The REST base `silvershop-suite/api` is deliberately GraphQL-free, so REST installs with no
 > `silverstripe/graphql` dependency or build step. This overlay hard-requires `silverstripe/graphql` and holds the
 > only code that references GraphQL classes (resolvers + middleware), so it is installed only when a client wants a
 > headless/PWA schema.
 
 ## Requirements
 
-- `silvershop/api` (the REST base), `silvershop/core` ^6, `silverstripe/framework` / `silverstripe/cms` ^6
+- `silvershop-suite/api` (the REST base), `silvershop/core` ^6, `silverstripe/framework` / `silverstripe/cms` ^6
 - `silverstripe/graphql` ^6.1
 - PHP 8.3 / 8.4
 
 ## Installation
 
-`silvershop/api` is published on the RVXD GitHub org (not Packagist), so add its repository, then require this
+`silvershop-suite/api` is published on the RVXD GitHub org (not Packagist), so add its repository, then require this
 module:
 
 ```jsonc
@@ -33,7 +33,7 @@ module:
 ```
 
 ```bash
-composer require silvershop/api-graphql
+composer require silvershop-suite/api-graphql
 ```
 
 Then **build the schema** and flush:

@@ -1,6 +1,6 @@
 {
-    "name": "silvershop/api-graphql",
-    "description": "GraphQL overlay for silvershop/api (SilverStripe CMS 6): a public /graphql schema for the SilverShop catalog, cart, checkout hand-off, orders and customer self-service — reusing the REST base's token auth, scopes and serializers. Thin by design: auth middleware + a handful of resolvers + schema config.",
+    "name": "silvershop-suite/api-graphql",
+    "description": "GraphQL overlay for silvershop-suite/api (SilverStripe CMS 6): a public /graphql schema for the SilverShop catalog, cart, checkout hand-off, orders and customer self-service — reusing the REST base's token auth, scopes and serializers. Thin by design: auth middleware + a handful of resolvers + schema config.",
     "type": "silverstripe-vendormodule",
     "keywords": ["silverstripe", "silvershop", "ecommerce", "api", "graphql", "headless"],
     "license": "BSD-3-Clause",
@@ -20,7 +20,7 @@
         "silverstripe/cms": "^6.0",
         "silverstripe/graphql": "^6.1",
         "silvershop/core": "^6",
-        "silvershop/api": "dev-main"
+        "silvershop-suite/api": "dev-main"
     },
     "require-dev": {
         "cambis/silverstan": "^2.1",
