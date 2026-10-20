@@ -18,7 +18,7 @@ SilverStripe\GraphQL\Schema\Schema:
   schemas:
     default:
       src:
-        silvershop-api-graphql: 'silvershop/api-graphql: _graphql'
+        silvershop-api-graphql: 'silvershop-suite/api-graphql: _graphql'
 
 # Wire the bearer-token auth onto the default schema's query handler:
 #  - bearerToken: resolves the Authorization: Bearer token via the REST base's TokenAuthenticator into an ApiContext
