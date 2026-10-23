@@ -107,6 +107,8 @@ OrderItem:
     buyableID: Int
     buyableClass: String
     quantity: Int
+    quantityDecimal: Float
+    quantityNice: String
     unitPrice: Float
     total: Float
 

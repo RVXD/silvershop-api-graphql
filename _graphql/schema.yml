@@ -47,10 +47,10 @@ queries:
 
 mutations:
   # --- Cart (write: `write` scope for bearer, CSRF for session) ---
-  'cartAdd(productID: Int!, buyable: String, quantity: Int = 1)':
+  'cartAdd(productID: Int!, buyable: String, quantity: Int = 1, quantityDecimal: Float)':
     type: CartMutationPayload
     resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveAdd']
-  'cartUpdate(productID: Int!, buyable: String, quantity: Int!)':
+  'cartUpdate(productID: Int!, buyable: String, quantity: Int, quantityDecimal: Float)':
     type: CartMutationPayload
     resolver: ['SilverShop\Api\GraphQL\Resolver\CartResolver', 'resolveUpdate']
   'cartRemove(productID: Int!, buyable: String, quantity: Int)':

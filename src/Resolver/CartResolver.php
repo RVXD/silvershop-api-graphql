@@ -58,9 +58,18 @@ class CartResolver
             $quantity = 0;
         }
 
+        // Decimal/fractional quantity (silvershop-suite/decimal-quantity): carry it in the filter and set the
+        // integer quantity to its ceil mirror. Harmless when that module isn't installed (the var is ignored).
+        $filter = [];
+        $decimal = isset($args['quantityDecimal']) ? (float) $args['quantityDecimal'] : 0.0;
+        if ($decimal > 0) {
+            $quantity = (int) ceil($decimal);
+            $filter['quantitydecimal'] = $decimal;
+        }
+
         $result = $quantity === 0
             ? $cart->remove($buyable, null, [])
-            : $cart->add($buyable, $quantity, []);
+            : $cart->add($buyable, $quantity, $filter);
 
         if ($result === null) {
             return self::cartOperationResult($cart, false);
@@ -87,11 +96,16 @@ class CartResolver
         }
 
         $quantity = (int) ($args['quantity'] ?? -1);
+        $decimal = isset($args['quantityDecimal']) ? (float) $args['quantityDecimal'] : 0.0;
+        if ($decimal > 0) {
+            $quantity = (int) ceil($decimal);
+        }
         if ($quantity < 0) {
             ResolverScope::fail('QuantityRequired', 'A quantity of zero or greater is required.');
         }
 
-        $result = $cart->setQuantity($buyable, $quantity, []);
+        $filter = $decimal > 0 ? ['quantitydecimal' => $decimal] : [];
+        $result = $cart->setQuantity($buyable, $quantity, $filter);
         if ($result === null) {
             return self::cartOperationResult($cart, false);
         }
